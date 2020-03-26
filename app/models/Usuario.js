@@ -15,11 +15,17 @@ exports.define = (sequelize) => {
     numero: {
       type: DataTypes.INTEGER
     },
+    bairro: {
+      type: DataTypes.STRING(255)
+    },
     cep: {
-      type: DataTypes.INTEGER
+      type: DataTypes.STRING(11)
     },
     data_de_registro: {
       type: DataTypes.DATE
+    },
+    tipo_de_usuario: {
+      type: DataTypes.INTEGER
     }
   })
 }
