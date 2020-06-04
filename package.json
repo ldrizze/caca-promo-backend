@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node main",
     "debug": "nodemon --inspect main",
+    "kill": "taskkill /f /im node.exe",
     "test": "mocha"
   },
   "repository": {
