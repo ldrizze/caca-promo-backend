@@ -3,7 +3,7 @@ module.exports = class UsuarioDefiner {
   constructor () {
     this.instance = null
   }
-
+  
   static define (sequelize) {
     this.instance = sequelize.define('Usuario', {
       id: {
@@ -36,6 +36,15 @@ module.exports = class UsuarioDefiner {
       },
       tipo_de_usuario: { // TODO Alterar para ENUM no documento
         type: DataTypes.ENUM('A', 'U', 'S', 'R')
+      }
+    }, {
+      defaultScope: {
+        attributes: { exclude: ['senha'] }
+      },
+      scopes: {
+        withPassword: {
+          attributes: {},
+        }
       }
     })
   }

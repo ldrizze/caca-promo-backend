@@ -10,5 +10,6 @@ module.exports = {
       timestamps: false
     }
   },
-  debug: process.env.DEBUG || false
+  debug: process.env.DEBUG || false,
+  secret: process.env.SECRET || 'Ea3m@nkkkkb3l3ç4'
 }
