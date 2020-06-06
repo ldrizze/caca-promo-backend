@@ -21,7 +21,7 @@ module.exports = class UsuarioController {
     }
     next()
   }
-  
+
   async create (req, res, next) {
     try {
       if (this._validateCreateInputs(req.body, false)) {
@@ -49,8 +49,8 @@ module.exports = class UsuarioController {
     try {
       if (this._validateCreateInputs(req.body)) {
         const exists = await Usuario.instance.findByPk(req.params.userId)
-        if (!exists) {
-          res.status(400).json(new ResponseError('USRDNTEXTS', `user doesn't exists`))
+        if (!exists || req.params.userId !== exists.id) {
+          res.status(404).json(new ResponseError('USRDNTEXTS', `user doesn't exists`))
         } else {
           const data = { ...req.body, id: exists.id, data_de_registro: new Date(), tipo_de_usuario: 'U' }
           if (data.senha) {
@@ -75,9 +75,13 @@ module.exports = class UsuarioController {
       if (!req.params.userId) {
         res.status(400).json(new ResponseError('USRWRID', `wrong userId ${req.params.userId}`))
       } else {
-        const usuario = await Usuario.findOne(req.params.userId)
-        await usuario.delete()
-        res.status(200).send()
+        const usuario = await Usuario.findByPk(req.params.userId)
+        if (!usuario) {
+          res.status(404).json(new Response('USRDNTEXISTS', `user doesn't exists`))
+        } else {
+          await usuario.delete()
+          res.status(200).send()
+        }
       }
     } catch(error) {
       log.e(error)

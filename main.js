@@ -38,6 +38,12 @@ app.use((req, res, next) => {
   next()
 })
 
+app.use((error, req, res, next) => {
+  log.e(error instanceof Error ? error.toString() : error)
+  log.i(`[REQUEST] ${req.url} ${JSON.stringify(req.body)} ${res.statusCode}`)
+  next()
+})
+
 app.listen(port) // start server listening
 
 console.log(`Listening on port: ${port}`)

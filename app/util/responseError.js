@@ -2,14 +2,22 @@ module.exports = class ResponseError {
   constructor (code, message, details) {
     this.code = code
     this.message = message
-    this.details = details
+    this.details = details instanceof Error ? details.toString() : details
   }
 
-  static generalError() {
-    return new ResponseError('GNRL', 'general error')
+  static generalError(details) {
+    return new ResponseError('GNRL', 'general error', details)
   }
 
-  static invalidParams() {
-    return new ResponseError('INVLPRMS', 'invalid params')
+  static invalidParams(details) {
+    return new ResponseError('INVLPRMS', 'invalid params', details)
+  }
+
+  static notFound(details) {
+    return new ResponseError('NTFND', 'not found', details)
+  }
+
+  static interal(details) {
+    return new ResponseError('INTSVERR', 'internal server error', details)
   }
 }
