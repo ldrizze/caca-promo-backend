@@ -3,6 +3,7 @@ const log = new Logger('UsuarioController')
 const validator = require('validator')
 const ResponseError = require('../util/responseError')
 const Restaurante = require('../models/Restaurante')
+const Promocao = require('../models/Promocao')
 
 module.exports = class RestauranteController {
   async getAll (req, res, next) {
@@ -45,7 +46,7 @@ module.exports = class RestauranteController {
       }
     } catch (error) {
       log.e(error.toString())
-      res.status(400).json(ResponseError.invalidParams(error))
+      res.status(500).json(ResponseError.interal(error))
     } finally {
       next()
     }
@@ -100,5 +101,29 @@ module.exports = class RestauranteController {
     !validator.isEmpty(inputs.numero) &&
     !validator.isEmpty(inputs.bairro) &&
     !validator.isEmpty(inputs.cep)
+  }
+
+  // ==================
+  // PROMOÇÕES
+  // ==================
+  async promoCreate (req, res, next) {
+    try {
+      const restaurantes = await req.session.user
+      const assoc = await restaurantes.getUsuariosRestaurante()
+      const restaurante = await assoc.getRestaurante()
+
+      if (restaurante.id != req.params.restauranteId) {
+        res.status(403).json(new ResponseError('PERMDNY', 'permission denied'))
+      } else {
+        const data = {...req.body, id_restaurante: req.params.restauranteId , data_de_registro: new Date()}
+        const promocao = await Promocao.instance.create(data)
+        res.json(promocao)
+      }
+    } catch (error) {
+      log.e(error)
+      res.status(500).json(ResponseError.interal(error))
+    } finally {
+      next()
+    }
   }
 }

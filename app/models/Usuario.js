@@ -8,7 +8,8 @@ module.exports = class UsuarioDefiner {
     this.instance = sequelize.define('Usuario', {
       id: {
         type: DataTypes.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
       },
       usuario: {
         type: DataTypes.STRING(15)

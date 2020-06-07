@@ -37,7 +37,7 @@ routes(app) // construct routes
 
 // Log middleware
 app.use((req, res, next) => {
-  log.i(`[REQUEST] ${req.url} ${JSON.stringify(req.body)} ${res.statusCode}`)
+  log.i(`${req.method} ${req.url} ${JSON.stringify(req.body)} ${res.statusCode}`)
   next()
 })
 

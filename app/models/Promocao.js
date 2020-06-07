@@ -1,35 +1,38 @@
 const DataTypes = require('sequelize').DataTypes
 
-module.exports = class UsuarioDefiner {
+module.exports = class Promocao {
   constructor () {
     this.instance = null
   }
 
   static define(sequelize) {
-    this.instance = sequelize.define('Restaurante', {
+    this.instance = sequelize.define('Promocao', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
+      id_restaurante: {
+        type: DataTypes.INTEGER
+      },
       nome: {
         type: DataTypes.STRING(60)
       },
-      endereco: {
-        type: DataTypes.STRING(255)
+      descricao: {
+        type: DataTypes.TEXT
       },
-      numero: {
-        type: DataTypes.INTEGER
+      data_inicio: {
+        type: DataTypes.DATE
       },
-      bairro: {
-        type: DataTypes.STRING(255)
-      },
-      cep: {
-        type: DataTypes.INTEGER
+      data_fim: {
+        type: DataTypes.DATE
       },
       data_de_registro: {
         type: DataTypes.DATE
       }
+    },
+    {
+      tableName: 'Promocoes'
     })
   }
 }

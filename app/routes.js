@@ -28,8 +28,11 @@ module.exports = (app) => {
     .post(Session.isAuth(['A']), restauranteController.create.bind(restauranteController))
 
   app.route('/restaurantes/:restauranteId')
-    .get(restauranteController.get.bind(restauranteController))
+    .get(Session.isAuth(['A', 'R']), restauranteController.get.bind(restauranteController))
     .put(Session.isAuth(['A', 'R']), restauranteController.update.bind(restauranteController))
+
+  app.route('/restaurantes/:restauranteId/promo')
+    .post(Session.isAuth(['R']), restauranteController.promoCreate.bind(restauranteController))
 
   // Session
   app.route('/session')

@@ -21,6 +21,7 @@ module.exports = class Session {
       if (
           !req.session ||
           (
+            req.session &&
             role &&
             role.indexOf(req.session.user.tipo_de_usuario) === -1
           )
