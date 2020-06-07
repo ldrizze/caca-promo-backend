@@ -15,7 +15,7 @@ module.exports = class AuthController {
           where: {
             [Op.or]: [
               {
-                email: req.body.email
+                email: req.body.usuario
               },
               {
                 usuario: req.body.usuario
@@ -44,15 +44,14 @@ module.exports = class AuthController {
     }
   }
 
+  async me(req, res, next) {
+    res.json(req.session.user)
+    next()
+  }
+
   _validateInput(inputs) {
-    return
-    !!inputs.senha &&
-    (
-      (
-        inputs.email
-        && validator.isEmail(inputs.email)
-      ) || inputs.usuario
-    )
+    return !!inputs.senha
+    && !!inputs.usuario
     && validator.isByteLength(inputs.senha, {min: 6})
   }
 }

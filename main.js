@@ -19,10 +19,11 @@ const port = process.env.PORT || 3000 // process.env.port for hosts enviroment
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   try {
     if (req.headers.authorization) {
       req.session = new Session(req.headers.authorization)
+      await req.session.fillUser()
     }
   } catch(error) {
     log.e(`Auth token error: ${req.headers.authorization}`)

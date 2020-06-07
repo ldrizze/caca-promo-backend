@@ -6,7 +6,10 @@ const ResponseError = require('../util/responseError')
 module.exports = class Session {
   constructor (token) {
     this.data = jwt.verify(token, config.secret)
-    Usuario.instance.findByPk(this.data.userid).then(user => this.user = user)
+  }
+
+  async fillUser() {
+    this.user = await Usuario.instance.findByPk(this.data.userid)
   }
 
   static make (userid) {

@@ -34,4 +34,7 @@ module.exports = (app) => {
   // Session
   app.route('/session')
     .post(authController.auth.bind(authController))
+
+  app.route('/session/me')
+    .get(Session.isAuth(), authController.me.bind(authController))
 }
