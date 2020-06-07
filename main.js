@@ -8,6 +8,7 @@ const modelDefine = require('./app/modelDefine')
 const Logger = require('./app/util/logger')
 const log = new Logger('SYSTEM')
 const Session = require('./app/util/session')
+const cors = require('cors')
 
 const app = express()
 const sequelize = new Sequelize(config.database)
@@ -15,6 +16,7 @@ modelDefine(sequelize)
 const port = process.env.PORT || 3000 // process.env.port for hosts enviroment
 
 // setup body-parser
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use((req, res, next) => {
@@ -34,12 +36,6 @@ routes(app) // construct routes
 
 // Log middleware
 app.use((req, res, next) => {
-  log.i(`[REQUEST] ${req.url} ${JSON.stringify(req.body)} ${res.statusCode}`)
-  next()
-})
-
-app.use((error, req, res, next) => {
-  log.e(error instanceof Error ? error.toString() : error)
   log.i(`[REQUEST] ${req.url} ${JSON.stringify(req.body)} ${res.statusCode}`)
   next()
 })

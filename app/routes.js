@@ -29,8 +29,8 @@ module.exports = (app) => {
 
   app.route('/restaurantes/:restauranteId')
     .get(restauranteController.get.bind(restauranteController))
-    .put(Session,isAuth(['A', 'R']), restauranteController.update.bind(restauranteController))
-  
+    .put(Session.isAuth(['A', 'R']), restauranteController.update.bind(restauranteController))
+
   // Session
   app.route('/session')
     .post(authController.auth.bind(authController))

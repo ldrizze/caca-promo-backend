@@ -3,12 +3,15 @@ module.exports = class UsuarioDefiner {
   constructor () {
     this.instance = null
   }
-  
+
   static define (sequelize) {
     this.instance = sequelize.define('Usuario', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true
+      },
+      usuario: {
+        type: DataTypes.STRING(15)
       },
       nome: {
         type: DataTypes.STRING(60)

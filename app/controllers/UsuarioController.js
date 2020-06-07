@@ -4,6 +4,7 @@ const validator = require('validator')
 const ResponseError = require('../util/responseError')
 const Usuario = require('../models/Usuario')
 const bcrypt = require('bcrypt')
+const { Op } = require("sequelize");
 
 module.exports = class UsuarioController {
   async get (req, res, next) {
@@ -25,7 +26,18 @@ module.exports = class UsuarioController {
   async create (req, res, next) {
     try {
       if (this._validateCreateInputs(req.body, false)) {
-        const exists = await Usuario.instance.count({email: req.email })
+        const exists = await Usuario.instance.count({
+          where: {
+            [Op.or]: [
+              {
+                email: req.body.email
+              },
+              {
+                usuario: req.body.usuario
+              }
+            ]
+          }
+        })
         if (exists > 0) {
           res.status(400).json(new ResponseError('USREXTS', 'user exists'))
         } else {
@@ -94,14 +106,11 @@ module.exports = class UsuarioController {
   _validateCreateInputs (inputs, update) {
     return !validator.isEmpty(inputs.email) &&
     validator.isEmail(inputs.email) &&
+    !validator.isEmpty(inputs.usuario) &&
     !validator.isEmpty(inputs.email) &&
     !validator.isEmpty(inputs.nome) &&
     !validator.isEmpty(inputs.email) &&
-    (!update || (!validator.isEmpty(inputs.senha) &&
-    validator.isByteLength(inputs.senha, {min: 6}))) &&
-    !validator.isEmpty(inputs.endereco) &&
-    !validator.isEmpty(inputs.numero) &&
-    !validator.isEmpty(inputs.bairro) &&
-    !validator.isEmpty(inputs.cep)
+    !validator.isEmpty(inputs.senha) &&
+    validator.isByteLength(inputs.senha, {min: 6})
   }
 }

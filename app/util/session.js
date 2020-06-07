@@ -14,7 +14,7 @@ module.exports = class Session {
   }
 
   static isAuth (role) {
-    (req, res, next) => {
+    return (req, res, next) => {
       if (
           !req.session ||
           (
@@ -26,12 +26,6 @@ module.exports = class Session {
       } else {
         next()
       }
-    }
-  }
-
-  static isRole() {
-    return (req, res, next) => {
-
     }
   }
 }

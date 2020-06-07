@@ -5,6 +5,7 @@ const validator = require('validator')
 const ResponseError = require('../util/responseError')
 const Logger = require('../util/logger')
 const log = new Logger('AuthController')
+const { Op } = require("sequelize");
 
 module.exports = class AuthController {
   async auth (req, res, next) {
@@ -12,7 +13,14 @@ module.exports = class AuthController {
       if (this._validateInput(req.body)) {
         const usuario = await Usuario.instance.scope('withPassword').findOne({
           where: {
-            email: req.body.email
+            [Op.or]: [
+              {
+                email: req.body.email
+              },
+              {
+                usuario: req.body.usuario
+              }
+            ]
           }
         })
         if (usuario) {
@@ -37,8 +45,14 @@ module.exports = class AuthController {
   }
 
   _validateInput(inputs) {
-    return !!inputs.email && !!inputs.senha
-    && validator.isEmail(inputs.email)
+    return
+    !!inputs.senha &&
+    (
+      (
+        inputs.email
+        && validator.isEmail(inputs.email)
+      ) || inputs.usuario
+    )
     && validator.isByteLength(inputs.senha, {min: 6})
   }
 }
