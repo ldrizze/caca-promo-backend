@@ -6,8 +6,8 @@ module.exports = (sequelize) => {
   const UsuariosRestauranteModelDefine = require('./models/UsuariosRestaurante')
   const AvaliacaoModelDefine = require('./models/Avaliacao')
   const ContatoModelDefine = require('./models/Contatos').define
-  const TipoComidaModelDefine = require('./models/TipoComida').define
-  // const ComidaFavoritaModelDefine = require('./models/ComidaFavorita').define
+  const TipoComidaModelDefine = require('./models/TipoComida')
+  const ComidaFavoritaModelDefine = require('./models/ComidaFavorita')
 
   // Defines
   UsuarioModelDefine.define(sequelize)
@@ -16,11 +16,40 @@ module.exports = (sequelize) => {
   UsuariosRestauranteModelDefine.define(sequelize)
   AvaliacaoModelDefine.define(sequelize)
   // ContatoModelDefine(sequelize)
-  // TipoComidaModelDefine(sequelize)
-  // ComidaFavoritaModelDefine(sequelize)) // N EXISTE
+  TipoComidaModelDefine.define(sequelize)
+  ComidaFavoritaModelDefine.define(sequelize)
 
 
   // Associations
+  // TipoComida X ComidaFavorita
+  TipoComidaModelDefine.instance.hasMany(
+    ComidaFavoritaModelDefine.instance,
+    {
+      foreignKey: 'id_tipo_comida'
+    }
+  )
+
+  UsuarioModelDefine.instance.hasMany(
+    ComidaFavoritaModelDefine.instance,
+    {
+      foreignKey: 'id_usuario'
+    }
+  )
+
+  ComidaFavoritaModelDefine.instance.belongsTo(
+    UsuarioModelDefine.instance,
+    {
+      foreignKey: 'id_usuario'
+    }
+  )
+
+  ComidaFavoritaModelDefine.instance.belongsTo(
+    TipoComidaModelDefine.instance,
+    {
+      foreignKey: 'id_tipo_comida'
+    }
+  )
+
   // Promoções
   RestauranteModelDefine.instance.hasMany(
     PromocaoModelDefine.instance,

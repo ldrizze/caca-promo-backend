@@ -3,6 +3,8 @@ const log = new Logger('UsuarioController')
 const validator = require('validator')
 const ResponseError = require('../util/responseError')
 const Usuario = require('../models/Usuario')
+const TipoComida = require('../models/TipoComida')
+const ComidaFavorita = require('../models/ComidaFavorita')
 const bcrypt = require('bcrypt')
 const { Op } = require("sequelize")
 
@@ -115,12 +117,64 @@ module.exports = class UsuarioController {
   }
 
   // ================
+  // COMIDAS FAVORITAS
+  // ================
+  async getComidasFavoritas (req, res, next) {
+    try {
+      const comidasFavoritas = await ComidaFavorita.instance.findAll({
+        where: {
+          id_usuario: req.session.user.id
+        }
+      })
+
+      res.json(comidasFavoritas)
+    } catch(error) {
+      log.e(error)
+      res.status(500).json(ResponseError.internal(error))
+    } finally {
+      next()
+    }
+  }
+
+  async createComidasFavoritas (req, res, next) {
+    try {
+      const fav = await ComidaFavorita.instance.create({
+        id_usuario: req.session.user.id,
+        id_tipo_comida: req.params.tipoComidaId
+      })
+
+      res.json(fav)
+    } catch (error) {
+      log.e(error)
+      res.status(500).json(ResponseError.internal(error))
+    } finally {
+      next()
+    }
+  }
+
+  async deleteComidasFavoritas (req, res, next) {
+    try {
+      const fav = await ComidaFavorita.instance.findOne({
+        id_usuario: req.session.user.id,
+        id_tipo_comida: req.params.tipoComidaId
+      })
+      fav.destroy()
+      res.send()
+    } catch (error) {
+      log.e(error)
+      res.status(500).json(ResponseError.internal(error))
+    } finally {
+      next()
+    }
+  }
+
+  // ================
   // AVALIAÇÕES
   // ================
   async createReview(req, res, next) {
     try {
       if (!req.body.pontuacao || validator.isInt(req.body.pontuacao)) {
-        
+
       } else {
 
       }
