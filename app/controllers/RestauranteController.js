@@ -4,16 +4,24 @@ const validator = require('validator')
 const ResponseError = require('../util/responseError')
 const Restaurante = require('../models/Restaurante')
 const Promocao = require('../models/Promocao')
+const { Op } = require("sequelize")
+const moment = require('moment')
 
 module.exports = class RestauranteController {
   async getAll (req, res, next) {
     try {
       const restaurantes = await Restaurante.instance.findAll({
-        orderBy: 'nome'
+        orderBy: 'nome',
+        include: [
+          {
+            model: Promocao.instance,
+            as: 'promocoes'
+          }
+        ]
       })
       res.json(restaurantes)
     } catch (error) {
-      res.status(500).json(ResponseError.interal(error))
+      res.status(500).json(ResponseError.internal(error))
     } finally {
       next()
     }
@@ -46,7 +54,7 @@ module.exports = class RestauranteController {
       }
     } catch (error) {
       log.e(error.toString())
-      res.status(500).json(ResponseError.interal(error))
+      res.status(500).json(ResponseError.internal(error))
     } finally {
       next()
     }
@@ -89,7 +97,7 @@ module.exports = class RestauranteController {
       }
     } catch(error) {
       log.e(error)
-      res.status(500).json(ResponseError.interal(error))
+      res.status(500).json(ResponseError.internal(error))
     } finally {
       next()
     }
@@ -121,7 +129,31 @@ module.exports = class RestauranteController {
       }
     } catch (error) {
       log.e(error)
-      res.status(500).json(ResponseError.interal(error))
+      res.status(500).json(ResponseError.internal(error))
+    } finally {
+      next()
+    }
+  }
+
+  async promoGetAllByDate (req, res, next) {
+    try {
+      const today = moment().format('YYYY-MM-DD')
+      const promocoes = await Promocao.instance.findAll({
+        where: {
+          data_inicio: {
+            [Op.lte]: today
+          },
+          data_fim: {
+            [Op.gte]: today
+          }
+        },
+        order: ['data_inicio']
+      })
+
+      res.json(promocoes)
+    } catch (error) {
+      log.e(error)
+      res.status(500).json(ResponseError.internal(error))
     } finally {
       next()
     }

@@ -17,10 +17,10 @@ module.exports = class UsuarioDefiner {
       nome: {
         type: DataTypes.STRING(60)
       },
-      email: { // TODO Adicionar ao documento
+      email: {
         type: DataTypes.STRING(45)
       },
-      senha: { // TODO Adicionar ao documento
+      senha: {
         type: DataTypes.STRING(60)
       },
       endereco: {
@@ -32,13 +32,13 @@ module.exports = class UsuarioDefiner {
       bairro: {
         type: DataTypes.STRING(255)
       },
-      cep: { // TODO Alterar tamanho no documento
+      cep: {
         type: DataTypes.CHAR(8)
       },
       data_de_registro: {
         type: DataTypes.DATE
       },
-      tipo_de_usuario: { // TODO Alterar para ENUM no documento
+      tipo_de_usuario: {
         type: DataTypes.ENUM('A', 'U', 'S', 'R')
       }
     }, {

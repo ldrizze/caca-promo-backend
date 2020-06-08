@@ -17,7 +17,7 @@ module.exports = class ResponseError {
     return new ResponseError('NTFND', 'not found', details)
   }
 
-  static interal(details) {
+  static internal(details) {
     return new ResponseError('INTSVERR', 'internal server error', details)
   }
 }

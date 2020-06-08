@@ -4,7 +4,7 @@ const validator = require('validator')
 const ResponseError = require('../util/responseError')
 const Usuario = require('../models/Usuario')
 const bcrypt = require('bcrypt')
-const { Op } = require("sequelize");
+const { Op } = require("sequelize")
 
 module.exports = class UsuarioController {
   async get (req, res, next) {
@@ -112,5 +112,23 @@ module.exports = class UsuarioController {
     !validator.isEmpty(inputs.email) &&
     !validator.isEmpty(inputs.senha) &&
     validator.isByteLength(inputs.senha, {min: 6})
+  }
+
+  // ================
+  // AVALIAÇÕES
+  // ================
+  async createReview(req, res, next) {
+    try {
+      if (!req.body.pontuacao || validator.isInt(req.body.pontuacao)) {
+        
+      } else {
+
+      }
+    } catch (eror) {
+      log.e(error)
+      res.status(500).json(ResponseError.internal(error))
+    } finally {
+      next()
+    }
   }
 }

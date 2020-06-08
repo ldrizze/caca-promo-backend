@@ -1,6 +1,6 @@
 const DataTypes = require('sequelize').DataTypes
 
-module.exports = class UsuarioDefiner {
+module.exports = class RestauranteDefiner {
   constructor () {
     this.instance = null
   }

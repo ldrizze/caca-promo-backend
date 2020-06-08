@@ -5,7 +5,7 @@ const validator = require('validator')
 const ResponseError = require('../util/responseError')
 const Logger = require('../util/logger')
 const log = new Logger('AuthController')
-const { Op } = require("sequelize");
+const { Op } = require("sequelize")
 
 module.exports = class AuthController {
   async auth (req, res, next) {
