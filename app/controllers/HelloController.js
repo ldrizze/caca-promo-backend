@@ -3,6 +3,6 @@ const log = new Logger('HelloController')
 
 module.exports = class HelloController {
   async sayHello (request, response) {
-    response.send('Hello!')
+    response.send('O Dario é bonitão!')
   }
 }
